@@ -6,7 +6,7 @@ public class Decision {
         Defect
     }
 
-    public static Type GenerateDecision(int cooperationPropability) {
+    public static Type generateDecision(int cooperationPropability) {
 
         if (cooperationPropability == 0) {
             return Type.Defect;
