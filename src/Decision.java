@@ -9,7 +9,7 @@ public class Decision {
     public static Type generateRandomDecision() {
         Random rand = new Random();
 
-        if (rand.nextInt(1) == 1) {
+        if (rand.nextInt(2) == 1) {
             return Type.Defect;
         }
         else {
