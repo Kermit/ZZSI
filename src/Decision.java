@@ -6,6 +6,17 @@ public class Decision {
         Defect
     }
 
+    public static Type generateRandomDecision() {
+        Random rand = new Random();
+
+        if (rand.nextInt(1) == 1) {
+            return Type.Defect;
+        }
+        else {
+            return Type.Cooperate;
+        }
+    }
+
     public static Type generateDecision(int cooperationPropability) {
 
         if (cooperationPropability == 0) {

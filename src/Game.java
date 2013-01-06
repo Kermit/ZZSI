@@ -25,7 +25,7 @@ public class Game {
     private void generatePrisoners() {
         for (int i = 0; i < numberOfPrisoners; i++) {
             //brak randomowego wybierania pierwszej decyzji
-            prisoners.add(new Prisoner(String.valueOf(i), Decision.Type.Cooperate));
+            prisoners.add(new Prisoner(String.valueOf(i), Decision.generateRandomDecision()));
         }
 
         for (Prisoner prisoner : prisoners) {
