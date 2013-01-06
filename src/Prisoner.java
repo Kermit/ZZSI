@@ -30,7 +30,7 @@ public class Prisoner {
         this.score += value;
     }
 
-    public Decision.Type getFirstDecision() {
+    public Decision.Type getLastDecision() {
         return firstDecision;
     }
 

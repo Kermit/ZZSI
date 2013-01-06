@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 /*
 Główna klasa gry. Tutaj są przechowywane wszystkie potrzebne informacje.
@@ -29,8 +29,42 @@ public class Game {
         }
 
         for (Prisoner prisoner : prisoners) {
-            System.out.println(prisoner.getName() + ", " + prisoner.getScore() + ", " + prisoner.getFirstDecision());
+            System.out.println(prisoner.getName() + ", " + prisoner.getScore() + ", " + prisoner.getLastDecision());
         }
+    }
+
+    private void duel(Prisoner firstPrisoner, Prisoner secondPrisoner) {
+        for (int i = 0; i < getNumberOfRounds(); ++i) {
+            if (firstPrisoner.getLastDecision() == Decision.Type.Cooperate) {
+                if (secondPrisoner.getLastDecision() == Decision.Type.Cooperate) {
+                         //TODO ddoać generowanie decyzji i nagrody/kary
+                }
+                else {
+
+                }
+            }
+            else {
+                if (secondPrisoner.getLastDecision() == Decision.Type.Cooperate) {
+
+                }
+                else {
+
+                }
+            }
+        }
+    }
+
+    private Map<Prisoner, Prisoner> generatePairs(ArrayList<Prisoner> prisoners) {
+
+        Map<Prisoner, Prisoner> pairs = new HashMap<Prisoner, Prisoner>();
+
+        for (int i = 0; i < prisoners.size(); ++i) {
+            for (int y = i + 1; y < prisoners.size(); ++y) {
+                pairs.put(prisoners.get(i), prisoners.get(y));
+            }
+        }
+
+        return pairs;
     }
 
     public int getNumberOfPopulations() {
