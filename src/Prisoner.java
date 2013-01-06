@@ -11,6 +11,17 @@ public class Prisoner {
      */
     private int score;
 
+    /*
+    Nazwa więźnia.
+     */
+    private String name;
+
+    public Prisoner(final String name, final Decision.Type firstDecision) {
+        this.name = name;
+        this.firstDecision = firstDecision;
+        this.score = 0;
+    }
+
     public int getScore() {
         return this.score;
     }
@@ -25,5 +36,13 @@ public class Prisoner {
 
     protected void setFirstDecision(Decision.Type firstDecision) {
         this.firstDecision = firstDecision;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
