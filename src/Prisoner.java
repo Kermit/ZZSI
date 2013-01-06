@@ -1,13 +1,23 @@
-/**
- * Created with IntelliJ IDEA.
- * User: ArkadiuszN
- * Date: 06.01.13
- * Time: 13:34
- * To change this template use File | Settings | File Templates.
- */
 public class Prisoner {
 
+    /*
+     Określamy pierwszą decyzję danego więźnia.
+     Losowane na starcie aplikacji.
+      */
     private Decision.Type firstDecision;
+
+    /*
+    Punkty więźnia.
+     */
+    private int score;
+
+    public int getScore() {
+        return this.score;
+    }
+
+    public void addScore(int value) {
+        this.score += value;
+    }
 
     public Decision.Type getFirstDecision() {
         return firstDecision;
