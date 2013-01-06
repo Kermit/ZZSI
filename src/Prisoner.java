@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Prisoner {
 
     /*
@@ -16,10 +18,17 @@ public class Prisoner {
      */
     private String name;
 
+    /*
+    Prawdopodobieństwa reakcji.
+     */
+    private Probabilities probabilities;
+
     public Prisoner(final String name, final Decision.Type firstDecision) {
         this.name = name;
         this.firstDecision = firstDecision;
         this.score = 0;
+
+        generateProbabilities();
     }
 
     public int getScore() {
@@ -44,5 +53,20 @@ public class Prisoner {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Probabilities getProbabilities() {
+        return probabilities;
+    }
+
+    public void setProbabilities(Probabilities probabilities) {
+        this.probabilities = probabilities;
+    }
+
+    public void generateProbabilities() {
+        Random random = new Random();
+
+        setProbabilities(new Probabilities(random.nextInt(100), random.nextInt(100),
+                random.nextInt(100), random.nextInt(100)));
     }
 }

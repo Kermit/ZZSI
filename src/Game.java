@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
 Główna klasa gry. Tutaj są przechowywane wszystkie potrzebne informacje.
@@ -28,8 +30,15 @@ public class Game {
             prisoners.add(new Prisoner(String.valueOf(i), Decision.generateRandomDecision()));
         }
 
+        System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Nazwa", "Punkty", "Pierwsza decyzja", "Temptation %",
+                "Reward %", "Suckers Payoff %", "Punishment %");
+        System.out.println();
         for (Prisoner prisoner : prisoners) {
-            System.out.println(prisoner.getName() + ", " + prisoner.getScore() + ", " + prisoner.getLastDecision());
+            System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", prisoner.getName(), prisoner.getScore(),
+                    prisoner.getLastDecision(), prisoner.getProbabilities().getAfterTemptation(),
+                    prisoner.getProbabilities().getAfterReward(), prisoner.getProbabilities().getAfterSuckersPayoff(),
+                    prisoner.getProbabilities().getAfterPunishment());
+            System.out.println();
         }
     }
 
