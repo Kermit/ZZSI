@@ -28,7 +28,8 @@ public class Main {
             roundCount = value;
         }
 
-        new Game(populationCount, prisonersCount, roundCount);
+        Game game = new Game(populationCount, prisonersCount, roundCount);
+        game.runGame();
     }
 
     private static int getIntNumber() {

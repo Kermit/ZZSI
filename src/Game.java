@@ -21,43 +21,66 @@ public class Game {
         generatePrisoners();
     }
 
-    /*
-    Metoda generująca wszystkich więźniów.
+    /**
+     * Metoda generująca wszystkich więźniów.
      */
     private void generatePrisoners() {
         for (int i = 0; i < numberOfPrisoners; i++) {
-            //brak randomowego wybierania pierwszej decyzji
             prisoners.add(new Prisoner(String.valueOf(i), Decision.generateRandomDecision()));
         }
 
-        System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Nazwa", "Punkty", "Pierwsza decyzja", "Temptation %",
-                "Reward %", "Suckers Payoff %", "Punishment %");
-        System.out.println();
-        for (Prisoner prisoner : prisoners) {
-            System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", prisoner.getName(), prisoner.getScore(),
-                    prisoner.getLastDecision(), prisoner.getProbabilities().getAfterTemptation(),
-                    prisoner.getProbabilities().getAfterReward(), prisoner.getProbabilities().getAfterSuckersPayoff(),
-                    prisoner.getProbabilities().getAfterPunishment());
-            System.out.println();
+        printScroes();
+    }
+
+    public void runGame() {
+        while (currentPopulation != numberOfPopulations) {
+            calculateGeneration();
+            ++currentPopulation;
+        }
+
+        printScroes();
+    }
+
+    /**
+     * Rozgrywa wszystkie gra w tej generacji.
+     */
+    private void calculateGeneration() {
+        for (int i = 0; i < prisoners.size(); ++i) {
+            for (int y = i + 1; y < prisoners.size(); ++y) {
+                duel(prisoners.get(i), prisoners.get(y));
+            }
         }
     }
 
     private void duel(Prisoner firstPrisoner, Prisoner secondPrisoner) {
         for (int i = 0; i < getNumberOfRounds(); ++i) {
-            if (firstPrisoner.getLastDecision() == Decision.Type.Cooperate) {
-                if (secondPrisoner.getLastDecision() == Decision.Type.Cooperate) {
-                         //TODO ddoać generowanie decyzji i nagrody/kary
-                }
-                else {
+            if (Decision.Type.Cooperate == firstPrisoner.getLastDecision()) {
+                if (Decision.Type.Cooperate == secondPrisoner.getLastDecision()) {
+                    firstPrisoner.setLastDecision(Decision.generateDecision(firstPrisoner.getProbabilities().getAfterReward()));
+                    secondPrisoner.setLastDecision(Decision.generateDecision(secondPrisoner.getProbabilities().getAfterReward()));
 
-                }
-            }
-            else {
-                if (secondPrisoner.getLastDecision() == Decision.Type.Cooperate) {
+                    firstPrisoner.addScore(Rewards.Reward.value);
+                    secondPrisoner.addScore(Rewards.Reward.value);
+                } else {
+                    firstPrisoner.setLastDecision(Decision.generateDecision(firstPrisoner.getProbabilities().getAfterSuckersPayoff()));
+                    secondPrisoner.setLastDecision(Decision.generateDecision(secondPrisoner.getProbabilities().getAfterTemptation()));
 
+                    firstPrisoner.addScore(Rewards.SuckersPayoff.value);
+                    secondPrisoner.addScore(Rewards.Temptation.value);
                 }
-                else {
+            } else {
+                if (Decision.Type.Cooperate == secondPrisoner.getLastDecision()) {
+                    firstPrisoner.setLastDecision(Decision.generateDecision(firstPrisoner.getProbabilities().getAfterTemptation()));
+                    secondPrisoner.setLastDecision(Decision.generateDecision(secondPrisoner.getProbabilities().getAfterSuckersPayoff()));
 
+                    firstPrisoner.addScore(Rewards.Temptation.value);
+                    secondPrisoner.addScore(Rewards.SuckersPayoff.value);
+                } else {
+                    firstPrisoner.setLastDecision(Decision.generateDecision(firstPrisoner.getProbabilities().getAfterPunishment()));
+                    secondPrisoner.setLastDecision(Decision.generateDecision(secondPrisoner.getProbabilities().getAfterPunishment()));
+
+                    firstPrisoner.addScore(Rewards.Punishment.value);
+                    secondPrisoner.addScore(Rewards.Punishment.value);
                 }
             }
         }
@@ -74,6 +97,19 @@ public class Game {
         }
 
         return pairs;
+    }
+
+    private void printScroes() {
+        System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Nazwa", "Punkty", "Ostatnia decyzja", "Temptation %",
+                "Reward %", "Suckers Payoff %", "Punishment %");
+        System.out.println();
+        for (Prisoner prisoner : prisoners) {
+            System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", prisoner.getName(), prisoner.getScore() / numberOfPopulations,
+                    prisoner.getLastDecision(), prisoner.getProbabilities().getAfterTemptation(),
+                    prisoner.getProbabilities().getAfterReward(), prisoner.getProbabilities().getAfterSuckersPayoff(),
+                    prisoner.getProbabilities().getAfterPunishment());
+            System.out.println();
+        }
     }
 
     public int getNumberOfPopulations() {

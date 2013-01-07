@@ -6,7 +6,7 @@ public class Prisoner {
      Określamy pierwszą decyzję danego więźnia.
      Losowane na starcie aplikacji.
       */
-    private Decision.Type firstDecision;
+    private Decision.Type lastDecision;
 
     /*
     Punkty więźnia.
@@ -23,9 +23,9 @@ public class Prisoner {
      */
     private Probabilities probabilities;
 
-    public Prisoner(final String name, final Decision.Type firstDecision) {
+    public Prisoner(final String name, final Decision.Type lastDecision) {
         this.name = name;
-        this.firstDecision = firstDecision;
+        this.lastDecision = lastDecision;
         this.score = 0;
 
         generateProbabilities();
@@ -40,11 +40,11 @@ public class Prisoner {
     }
 
     public Decision.Type getLastDecision() {
-        return firstDecision;
+        return lastDecision;
     }
 
-    protected void setFirstDecision(Decision.Type firstDecision) {
-        this.firstDecision = firstDecision;
+    protected void setLastDecision(Decision.Type lastDecision) {
+        this.lastDecision = lastDecision;
     }
 
     public String getName() {
