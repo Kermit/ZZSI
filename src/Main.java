@@ -1,4 +1,4 @@
-package ZZSI;
+import ZZSI.Game;
 
 import java.util.Scanner;
 
