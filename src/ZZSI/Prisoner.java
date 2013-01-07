@@ -13,7 +13,7 @@ public class Prisoner {
     /*
     Punkty więźnia.
      */
-    private int score;
+    private double score;
 
     /*
     Nazwa więźnia.
@@ -33,11 +33,11 @@ public class Prisoner {
         generateProbabilities();
     }
 
-    public int getScore() {
+    public double getScore() {
         return this.score;
     }
 
-    public void addScore(int value) {
+    public void addScore(double value) {
         this.score += value;
     }
 
