@@ -1,3 +1,5 @@
+package ZZSI;
+
 import java.util.Random;
 
 public class Prisoner {

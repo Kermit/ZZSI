@@ -1,3 +1,5 @@
+package ZZSI;
+
 /*
 Przetrzymuje wartości prawdopodobieństwa daleszj współpracy po konkretnej nagrodzie.
  */

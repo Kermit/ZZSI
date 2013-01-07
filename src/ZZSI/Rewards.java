@@ -1,3 +1,5 @@
+package ZZSI;
+
 /*
 Klasa określająca nagrody dla więźniów.
  */

@@ -1,3 +1,6 @@
+package ZZSI;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,16 +32,17 @@ public class Game {
             prisoners.add(new Prisoner(String.valueOf(i), Decision.generateRandomDecision()));
         }
 
-        printScroes();
+        printScroes(false);
     }
 
     public void runGame() {
         while (currentPopulation != numberOfPopulations) {
             calculateGeneration();
             ++currentPopulation;
+            printProgress();
         }
 
-        printScroes();
+        printScroes(true);
     }
 
     /**
@@ -99,7 +103,7 @@ public class Game {
         return pairs;
     }
 
-    private void printScroes() {
+    private void printScroes(boolean sort) {
         System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Nazwa", "Punkty", "Ostatnia decyzja", "Temptation %",
                 "Reward %", "Suckers Payoff %", "Punishment %");
         System.out.println();
@@ -110,6 +114,21 @@ public class Game {
                     prisoner.getProbabilities().getAfterPunishment());
             System.out.println();
         }
+    }
+
+    private void printProgress() {
+        try {
+            String OS = System.getProperty("os.name");
+            if (OS.startsWith("Windows")) {
+                Runtime.getRuntime().exec("cls");
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch (IOException e) {
+
+        }
+
+        System.out.println("Progress " + currentPopulation);
     }
 
     public int getNumberOfPopulations() {
