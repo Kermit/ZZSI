@@ -36,7 +36,7 @@ public class Main {
             crossProb = getDoubleNumber(0, 1);
         }
 
-        Game game = new Game(populationCount, prisonersCount, roundCount, crossProb, mutationProb);
+        Game game = new Game(populationCount, prisonersCount, roundCount, mutationProb, crossProb);
         game.runGame();
     }
 
@@ -68,11 +68,11 @@ public class Main {
         try {
             value = scanner.nextDouble();
 
-            if (value <= min) {
+            if (value < min) {
                 return -1;
             }
 
-            if (max != -1 && value >= max) {
+            if (max != -1 && value > max) {
                 return -1;
             }
         } catch (Exception e) {

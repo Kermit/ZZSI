@@ -42,6 +42,11 @@ public class Game {
         while (currentPopulation != numberOfPopulations) {
             calculateGeneration();
             cross();
+
+            if (currentPopulation != numberOfPopulations - 1) {  //mutowanie do przedostatniej rundy, aby wyświetlić prawidłowe wyniki
+                mutate();
+            }
+
             ++currentPopulation;
             printProgress();
         }
@@ -65,11 +70,51 @@ public class Game {
                 bestPrisoners.add(prisoner);
             }
         }
-//        prisoners.removeAll(bestPrisoners);
+        prisoners.removeAll(bestPrisoners);
+
+        while (bestPrisoners.size() > 0) {
+            Prisoner parent1 = Prisoner.getRandomPrisoner(bestPrisoners);
+            bestPrisoners.remove(parent1);
+            Prisoner parent2 = Prisoner.getRandomPrisoner(bestPrisoners);
+
+            if (parent2 != null) {
+                bestPrisoners.remove(parent2);
+
+                if (Probabilities.getRandom((int)(crossProbability * 100))) {
+                    Prisoner child1 = Prisoner.getCrossedPrisoner(parent1, parent2);
+                    Prisoner child2 = Prisoner.getCrossedPrisoner(parent2, parent1);
+
+                    child1.setName(parent1.getName());
+                    child2.setName(parent2.getName());
+
+                    prisoners.add(child1);
+                    prisoners.add(child2);
+                }
+                else {
+                    prisoners.add(parent1);
+                    prisoners.add(parent2);
+                }
+            }
+            else {
+                //nieparzysta ilośc rodziców - do puli wraca ostatni rodzic
+                prisoners.add(parent1);
+            }
+        }
     }
 
     /**
-     * Rozgrywa wszystkie gra w tej generacji.
+     * Wykonaj mutację
+     */
+    private void mutate() {
+        for (Prisoner prisoner : prisoners) {
+            if (Probabilities.getRandom((int)(mutationProbability * 100))) {
+                 prisoner.mutate();
+            }
+        }
+    }
+
+    /**
+     * Rozgrywa wszystkie gry w tej generacji.
      */
     private void calculateGeneration() {
         for (int i = 0; i < prisoners.size(); ++i) {

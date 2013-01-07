@@ -1,5 +1,7 @@
 package ZZSI;
 
+import java.util.Random;
+
 /*
 Przetrzymuje wartości prawdopodobieństwa daleszj współpracy po konkretnej nagrodzie.
  */
@@ -19,6 +21,19 @@ public class Probabilities {
         this.afterTemptation = afterTemptation;
         this.afterSuckersPayoff = afterSuckersPayoff;
         this.afterPunishment = afterPunishment;
+    }
+
+    /**
+     * Losuje prawdopodobieństwo z podanego przedzialu (0 - 100%)
+     * @param propability
+     * @return True jeśli wylosowano
+     */
+    public static boolean getRandom(int propability) {
+        if (new Random().nextInt(100) < propability) {
+            return true;
+        }
+
+        return false;
     }
 
     public int getAfterReward() {
