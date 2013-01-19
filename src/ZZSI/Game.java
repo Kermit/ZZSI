@@ -32,7 +32,7 @@ public class Game {
      */
     private void generatePrisoners() {
         for (int i = 0; i < numberOfPrisoners; i++) {
-            prisoners.add(new Prisoner(String.valueOf(i), Decision.generateRandomDecision()));
+            prisoners.add(new Prisoner(currentPopulation + "-" + String.valueOf(i), Decision.generateRandomDecision()));
         }
 
         printScroes(false);
@@ -81,14 +81,7 @@ public class Game {
                 bestPrisoners.remove(parent2);
 
                 if (Probabilities.getRandom((int)(crossProbability * 100))) {
-                    Prisoner child1 = Prisoner.getCrossedPrisoner(parent1, parent2);
-                    Prisoner child2 = Prisoner.getCrossedPrisoner(parent2, parent1);
-
-                    child1.setName(parent1.getName());
-                    child2.setName(parent2.getName());
-
-                    prisoners.add(child1);
-                    prisoners.add(child2);
+                    prisoners.addAll(Prisoner.getCrossedPrisoner(parent1, parent2, currentPopulation));
                 }
                 else {
                     prisoners.add(parent1);
