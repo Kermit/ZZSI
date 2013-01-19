@@ -1,9 +1,6 @@
 package ZZSI;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /*
 Główna klasa gry. Tutaj są przechowywane wszystkie potrzebne informacje.
@@ -17,7 +14,7 @@ public class Game {
     private int currentRound = 1;
     private double mutationProbability;
     private double crossProbability;
-    private ArrayList<Prisoner> prisoners = new ArrayList<Prisoner>();
+    private Map<String, Prisoner> prisoners = new LinkedHashMap<String, Prisoner>();
 
     public Game(final int populations, final int prisoners, final int rounds, final double mutation, final double cross,
                 final boolean showScoreAfterGeneration) {
@@ -36,7 +33,8 @@ public class Game {
      */
     private void generatePrisoners() {
         for (int i = 0; i < numberOfPrisoners; i++) {
-            prisoners.add(new Prisoner(currentPopulation + "-" + String.valueOf(i), Decision.generateRandomDecision()));
+            Prisoner prisoner = new Prisoner(currentPopulation + "-" + String.valueOf(i), Decision.generateRandomDecision());
+            prisoners.put(prisoner.getName(), prisoner);
         }
 
         printScroes(false);
@@ -64,32 +62,34 @@ public class Game {
     private void cross() {
 
         double populationMax = 0;
-        for (Prisoner prisoner : prisoners) {
+        for (Prisoner prisoner : prisoners.values()) {
             if (prisoner.getScore() > populationMax) {
                 populationMax = prisoner.getScore();
             }
         }
 
-        ArrayList<Prisoner> winners = new ArrayList<Prisoner>();
+        Map<String, Prisoner> winners = new LinkedHashMap<String, Prisoner>();
 
         while (winners.size() < numberOfPrisoners) {
-            Prisoner parent1 = Prisoner.getRandomPrisoner(prisoners, populationMax);
-            Prisoner parent2 = Prisoner.getRandomPrisoner(prisoners, populationMax);
+            Prisoner parent1 = Prisoner.getRandomPrisoner(prisoners.values(), populationMax);
+            Prisoner parent2 = Prisoner.getRandomPrisoner(prisoners.values(), populationMax);
 
-            if (Probabilities.getRandom((int)(crossProbability * 100))) {
-                List<Prisoner> children = Prisoner.getCrossedPrisoner(parent1, parent2, currentPopulation);
+            if (Probabilities.getRandom((int) (crossProbability * 100))) {
+                Map<String, Prisoner> children = Prisoner.getCrossedPrisoner(parent1, parent2, currentPopulation);
 
-                winners.add(children.get(0));
+                Prisoner child1 = children.entrySet().iterator().next().getValue();
+                Prisoner child2 = children.entrySet().iterator().next().getValue();
+
+                winners.put(child1.getName(), child1);
                 if (winners.size() < numberOfPrisoners) {
-                    winners.add(children.get(1));
+                    winners.put(child2.getName(), child2);
                 }
-            }
-            else {
-                if (!winners.contains(parent1)) {
-                    winners.add(parent1);
+            } else {
+                if (!winners.containsKey(parent1.getName())) {
+                    winners.put(parent1.getName(), parent1);
                 }
-                if (!winners.contains(parent2) && winners.size() < numberOfPrisoners) {
-                    winners.add(parent2);
+                if (!winners.containsKey(parent2.getName()) && winners.size() < numberOfPrisoners) {
+                    winners.put(parent2.getName(), parent2);
                 }
             }
         }
@@ -101,9 +101,9 @@ public class Game {
      * Wykonaj mutację
      */
     private void mutate() {
-        for (Prisoner prisoner : prisoners) {
-            if (Probabilities.getRandom((int)(mutationProbability * 100))) {
-                 prisoner.mutate();
+        for (Prisoner prisoner : prisoners.values()) {
+            if (Probabilities.getRandom((int) (mutationProbability * 100))) {
+                prisoner.mutate();
             }
         }
     }
@@ -112,9 +112,10 @@ public class Game {
      * Rozgrywa wszystkie gry w tej generacji.
      */
     private void calculateGeneration() {
-        for (int i = 0; i < prisoners.size(); ++i) {
-            for (int y = i + 1; y < prisoners.size(); ++y) {
-                duel(prisoners.get(i), prisoners.get(y));
+        ArrayList<Prisoner> list = new ArrayList<>(prisoners.values());
+        for (int i = 0; i < list.size(); ++i) {
+            for (int y = i + 1; y < list.size(); ++y) {
+                duel(list.get(i), list.get(y));
             }
         }
     }
@@ -165,18 +166,10 @@ public class Game {
      * @param sort jeśli true to sortuj wyniki, inaczej pozostaw kolejność listy
      */
     private void printScroes(boolean sort) {
-        if (sort) {
-            Collections.sort(prisoners, new Comparator<Prisoner>() {
-                @Override
-                public int compare(Prisoner o1, Prisoner o2) {
-                    return Double.compare(o2.getScore(), o1.getScore());
-                }
-            });
-        }
         System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Nazwa", "Punkty", "Ostatnia decyzja", "Temptation %",
                 "Reward %", "Suckers Payoff %", "Punishment %");
         System.out.println();
-        for (Prisoner prisoner : prisoners) {
+        for (Prisoner prisoner : prisoners.values()) {
             System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", prisoner.getName(),
                     prisoner.getScore() / numberOfPrisoners, prisoner.getLastDecision(),
                     prisoner.getProbabilities().getAfterTemptation(), prisoner.getProbabilities().getAfterReward(),
@@ -205,9 +198,5 @@ public class Game {
 
     public int getNumberOfRounds() {
         return numberOfRounds;
-    }
-
-    public ArrayList<Prisoner> getPrisoners() {
-        return prisoners;
     }
 }
