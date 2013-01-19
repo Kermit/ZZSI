@@ -1,6 +1,7 @@
 package ZZSI;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Prisoner {
@@ -53,21 +54,43 @@ public class Prisoner {
         }
     }
 
-    public static Prisoner getCrossedPrisoner(Prisoner father, Prisoner mother) {
-        double attribA = 0.75;
-        double attribB = 0.25;
+    public static List<Prisoner> getCrossedPrisoner(Prisoner father, Prisoner mother, int currentPopulation) {
+        Random random = new Random();
 
-        Probabilities probabilities = new Probabilities(
-                (int)(father.getProbabilities().getAfterReward() * attribA + mother.getProbabilities().getAfterReward() * attribB),
-                (int)(father.getProbabilities().getAfterTemptation() * attribA + mother.getProbabilities().getAfterTemptation() * attribB),
-                (int)(father.getProbabilities().getAfterSuckersPayoff() * attribA + mother.getProbabilities().getAfterSuckersPayoff() * attribB),
-                (int)(father.getProbabilities().getAfterPunishment() * attribA + mother.getProbabilities().getAfterPunishment() * attribB)
+        List<Prisoner> result = new ArrayList<Prisoner>();
+
+        double afterRewardA = random.nextDouble();
+        double afterRewardB = 1.0 - afterRewardA;
+        double afterTemptationA = random.nextDouble();
+        double afterTemptationB = 1.0 - afterTemptationA;
+        double afterSuckerPayoffA = random.nextDouble();
+        double afterSuckerPayoffB = 1.0 - afterSuckerPayoffA;
+        double afterPunishmentA = random.nextDouble();
+        double afterPunishmentB = 1.0 - afterPunishmentA;
+
+        Probabilities firstChildProb = new Probabilities(
+                (int)(father.getProbabilities().getAfterReward() * afterRewardA + mother.getProbabilities().getAfterReward() * afterRewardB),
+                (int)(father.getProbabilities().getAfterTemptation() * afterTemptationA + mother.getProbabilities().getAfterTemptation() * afterTemptationB),
+                (int)(father.getProbabilities().getAfterSuckersPayoff() * afterSuckerPayoffA + mother.getProbabilities().getAfterSuckersPayoff() * afterSuckerPayoffB),
+                (int)(father.getProbabilities().getAfterPunishment() * afterPunishmentA + mother.getProbabilities().getAfterPunishment() * afterPunishmentB)
         );
 
-        Prisoner child = new Prisoner("-1", Decision.generateRandomDecision());
-        child.setProbabilities(probabilities);
+        Probabilities secondChildProb = new Probabilities(
+                (int)(father.getProbabilities().getAfterReward() * afterRewardB + mother.getProbabilities().getAfterReward() * afterRewardA),
+                (int)(father.getProbabilities().getAfterTemptation() * afterTemptationB + mother.getProbabilities().getAfterTemptation() * afterTemptationA),
+                (int)(father.getProbabilities().getAfterSuckersPayoff() * afterSuckerPayoffB + mother.getProbabilities().getAfterSuckersPayoff() * afterSuckerPayoffA),
+                (int)(father.getProbabilities().getAfterPunishment() * afterPunishmentB + mother.getProbabilities().getAfterPunishment() * afterPunishmentA)
+        );
 
-        return child;
+        Prisoner firstChild = new Prisoner(currentPopulation + father.getName().substring(father.getName().indexOf("-")), Decision.generateRandomDecision());
+        firstChild.setProbabilities(firstChildProb);
+
+        Prisoner secondChild = new Prisoner(currentPopulation + mother.getName().substring(mother.getName().indexOf("-")), Decision.generateRandomDecision());
+        secondChild.setProbabilities(secondChildProb);
+
+        result.add(firstChild);
+        result.add(secondChild);
+        return result;
     }
 
     public void mutate() {
