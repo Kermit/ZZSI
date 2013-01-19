@@ -10,6 +10,8 @@ public class Main {
         int roundCount = -1;
         double crossProb = -1;
         double mutationProb = -1;
+        String showScoresAlways = "A";
+        boolean showScoreAfterGeneration = false;
 
         while (prisonersCount == -1) {
             System.out.println("Podaj liczbę osobników w populacji (x > 0): ");
@@ -36,7 +38,18 @@ public class Main {
             crossProb = getDoubleNumber(0, 1);
         }
 
-        Game game = new Game(populationCount, prisonersCount, roundCount, mutationProb, crossProb);
+        while ("A".equals(showScoresAlways)) {
+            System.out.println("Pokazywać wynki co generację (T/N)?");
+            showScoresAlways = getString();
+
+            if ("T".equals(showScoresAlways)) {
+                showScoreAfterGeneration = true;
+            } else if ("N".equals(showScoresAlways)) {
+                showScoreAfterGeneration = false;
+            }
+        }
+
+        Game game = new Game(populationCount, prisonersCount, roundCount, mutationProb, crossProb, showScoreAfterGeneration);
         game.runGame();
     }
 
@@ -77,6 +90,23 @@ public class Main {
             }
         } catch (Exception e) {
             return -1;
+        }
+
+        return value;
+    }
+
+    private static String getString() {
+        Scanner scanner = new Scanner(System.in);
+        String value;
+
+        try {
+            value = scanner.next();
+
+            if (!"T".equals(value) && !"N".equals(value)) {
+                return "A";
+            }
+        } catch (Exception e) {
+            return "A";
         }
 
         return value;

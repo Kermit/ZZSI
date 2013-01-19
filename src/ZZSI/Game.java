@@ -11,18 +11,21 @@ public class Game {
     private int numberOfPopulations;
     private int numberOfPrisoners;
     private int numberOfRounds;
+    private boolean showScoresAfterGeneration;
     private int currentPopulation = 1;
     private int currentRound = 1;
     private double mutationProbability;
     private double crossProbability;
     private ArrayList<Prisoner> prisoners = new ArrayList<Prisoner>();
 
-    public Game(final int populations, final int prisoners, final int rounds, final double mutation, final double cross) {
+    public Game(final int populations, final int prisoners, final int rounds, final double mutation, final double cross,
+                final boolean showScoresAfterGeneration) {
         this.numberOfPopulations = populations;
         this.numberOfPrisoners = prisoners;
         this.numberOfRounds = rounds;
         this.mutationProbability = mutation;
         this.crossProbability = cross;
+        this.showScoresAfterGeneration = showScoresAfterGeneration;
 
         generatePrisoners();
     }
@@ -188,6 +191,9 @@ public class Game {
      */
     private void printProgress() {
         System.out.println("Generacja " + currentPopulation + " z " + numberOfPopulations);
+        if (showScoresAfterGeneration) {
+            printScroes(false);
+        }
     }
 
     public int getNumberOfPopulations() {
