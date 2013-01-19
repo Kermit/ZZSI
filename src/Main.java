@@ -49,7 +49,7 @@ public class Main {
             }
         }
 
-        Game game = new Game(populationCount, prisonersCount, roundCount, mutationProb, crossProb, showScoreAfterGeneration);
+        Game game = new Game(populationCount, prisonersCount, roundCount, mutationProb, crossProb);
         game.runGame();
     }
 
