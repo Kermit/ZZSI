@@ -12,6 +12,8 @@ public class Main {
         double mutationProb = -1;
         String showScoresAlways = "A";
         boolean showScoreAfterGeneration = false;
+        String zeroScoresAnswer = "A";
+        boolean zeroScores = false;
 
         while (prisonersCount == -1) {
             System.out.println("Podaj liczbę osobników w populacji (x > 0): ");
@@ -40,7 +42,7 @@ public class Main {
 
         while ("A".equals(showScoresAlways)) {
             System.out.println("Pokazywać wynki co generację (T/N)?");
-            showScoresAlways = getString();
+            showScoresAlways = getAGString();
 
             if ("T".equals(showScoresAlways)) {
                 showScoreAfterGeneration = true;
@@ -49,7 +51,19 @@ public class Main {
             }
         }
 
-        Game game = new Game(populationCount, prisonersCount, roundCount, mutationProb, crossProb, showScoreAfterGeneration);
+        while ("A".equals(zeroScoresAnswer)) {
+            System.out.println("Zerować wyniki? (T/N)");
+            zeroScoresAnswer = getAGString();
+
+            if ("T".equals(zeroScoresAnswer)) {
+                zeroScores = true;
+            } else if ("N".equals(zeroScoresAnswer)) {
+                zeroScores = false;
+            }
+        }
+
+        Game game = new Game(populationCount, prisonersCount, roundCount, mutationProb, crossProb,
+                showScoreAfterGeneration, zeroScores);
         game.runGame();
     }
 
@@ -95,7 +109,7 @@ public class Main {
         return value;
     }
 
-    private static String getString() {
+    private static String getAGString() {
         Scanner scanner = new Scanner(System.in);
         String value;
 

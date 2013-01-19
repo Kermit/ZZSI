@@ -10,6 +10,7 @@ public class Game {
     private int numberOfPrisoners;
     private int numberOfRounds;
     private boolean showScoreAfterGeneration;
+    private boolean zeroScores;
     private int currentPopulation = 1;
     private int currentRound = 1;
     private double mutationProbability;
@@ -17,13 +18,14 @@ public class Game {
     private Map<String, Prisoner> prisoners = new LinkedHashMap<String, Prisoner>();
 
     public Game(final int populations, final int prisoners, final int rounds, final double mutation, final double cross,
-                final boolean showScoreAfterGeneration) {
+                final boolean showScoreAfterGeneration, final boolean zeroScores) {
         this.numberOfPopulations = populations;
         this.numberOfPrisoners = prisoners;
         this.numberOfRounds = rounds;
         this.mutationProbability = mutation;
         this.crossProbability = cross;
         this.showScoreAfterGeneration = showScoreAfterGeneration;
+        this.zeroScores = zeroScores;
 
         generatePrisoners();
     }
@@ -47,8 +49,10 @@ public class Game {
 
             if (currentPopulation != numberOfPopulations - 1) {  //mutowanie do przedostatniej rundy, aby wyświetlić prawidłowe wyniki
                 mutate();
-                for (Prisoner prisoner : prisoners.values()) {
-                    prisoner.zeroScore();
+                if (zeroScores) {
+                    for (Prisoner prisoner : prisoners.values()) {
+                        prisoner.zeroScore();
+                    }
                 }
             }
 
@@ -179,7 +183,7 @@ public class Game {
             });
 
             prisoners = new LinkedHashMap<String, Prisoner>();
-            for (Map.Entry<String, Prisoner> entry: entries) {
+            for (Map.Entry<String, Prisoner> entry : entries) {
                 prisoners.put(entry.getKey(), entry.getValue());
             }
         }
