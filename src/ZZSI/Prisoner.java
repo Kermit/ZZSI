@@ -34,11 +34,19 @@ public class Prisoner {
         generateProbabilities();
     }
 
-    public static Prisoner getRandomPrisoner(ArrayList<Prisoner> prisonersToChoose) {
+    public static Prisoner getRandomPrisoner(ArrayList<Prisoner> prisonersToChoose, double maxScore) {
         Random rand = new Random();
 
         if (prisonersToChoose.size() > 0) {
-            return prisonersToChoose.get(rand.nextInt(prisonersToChoose.size()));
+
+            while (true) {
+                Prisoner prisoner = prisonersToChoose.get(rand.nextInt(prisonersToChoose.size()));
+                double prisonerPercetage = prisoner.getScore() * 80 / maxScore + 10;
+
+                if (Probabilities.getRandom((int)prisonerPercetage)) {
+                    return prisoner;
+                }
+            }
         }
         else {
             return null;

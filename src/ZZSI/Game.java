@@ -58,48 +58,38 @@ public class Game {
      * Wykonaj krzyżowanie.
      */
     private void cross() {
-        double populationAvg = 0;
-        for (Prisoner prisoner : prisoners) {
-            populationAvg += prisoner.getScore();
-        }
-        populationAvg /= numberOfPrisoners;
 
-        ArrayList<Prisoner> bestPrisoners = new ArrayList<Prisoner>();
+        double populationMax = 0;
         for (Prisoner prisoner : prisoners) {
-            if (prisoner.getScore() > populationAvg) {
-                bestPrisoners.add(prisoner);
+            if (prisoner.getScore() > populationMax) {
+                populationMax = prisoner.getScore();
             }
         }
-        prisoners.removeAll(bestPrisoners);
 
-        while (bestPrisoners.size() > 0) {
-            Prisoner parent1 = Prisoner.getRandomPrisoner(bestPrisoners);
-            bestPrisoners.remove(parent1);
-            Prisoner parent2 = Prisoner.getRandomPrisoner(bestPrisoners);
+        ArrayList<Prisoner> winners = new ArrayList<Prisoner>();
 
-            if (parent2 != null) {
-                bestPrisoners.remove(parent2);
+        while (winners.size() < numberOfPrisoners) {
+            Prisoner parent1 = Prisoner.getRandomPrisoner(prisoners, populationMax);
+            Prisoner parent2 = Prisoner.getRandomPrisoner(prisoners, populationMax);
 
-                if (Probabilities.getRandom((int)(crossProbability * 100))) {
-                    Prisoner child1 = Prisoner.getCrossedPrisoner(parent1, parent2);
-                    Prisoner child2 = Prisoner.getCrossedPrisoner(parent2, parent1);
+            if (Probabilities.getRandom((int)(crossProbability * 100))) {
+                Prisoner child1 = Prisoner.getCrossedPrisoner(parent1, parent2);
 
-                    child1.setName(parent1.getName());
-                    child2.setName(parent2.getName());
+                child1.setName(parent1.getName());
 
-                    prisoners.add(child1);
-                    prisoners.add(child2);
-                }
-                else {
-                    prisoners.add(parent1);
-                    prisoners.add(parent2);
-                }
+                winners.add(child1);
             }
             else {
-                //nieparzysta ilośc rodziców - do puli wraca ostatni rodzic
-                prisoners.add(parent1);
+                if (!winners.contains(parent1)) {
+                    winners.add(parent1);
+                }
+                if (!winners.contains(parent2) && winners.size() < numberOfPrisoners) {
+                    winners.add(parent2);
+                }
             }
         }
+
+        prisoners = winners;
     }
 
     /**
