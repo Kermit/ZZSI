@@ -12,18 +12,21 @@ public class Game {
     private int numberOfPopulations;
     private int numberOfPrisoners;
     private int numberOfRounds;
+    private boolean showScoreAfterGeneration;
     private int currentPopulation = 1;
     private int currentRound = 1;
     private double mutationProbability;
     private double crossProbability;
     private ArrayList<Prisoner> prisoners = new ArrayList<Prisoner>();
 
-    public Game(final int populations, final int prisoners, final int rounds, final double mutation, final double cross) {
+    public Game(final int populations, final int prisoners, final int rounds, final double mutation, final double cross,
+                final boolean showScoreAfterGeneration) {
         this.numberOfPopulations = populations;
         this.numberOfPrisoners = prisoners;
         this.numberOfRounds = rounds;
         this.mutationProbability = mutation;
         this.crossProbability = cross;
+        this.showScoreAfterGeneration = showScoreAfterGeneration;
 
         generatePrisoners();
     }
@@ -33,7 +36,7 @@ public class Game {
      */
     private void generatePrisoners() {
         for (int i = 0; i < numberOfPrisoners; i++) {
-            prisoners.add(new Prisoner(String.valueOf(i), Decision.generateRandomDecision()));
+            prisoners.add(new Prisoner(currentPopulation + "-" + String.valueOf(i), Decision.generateRandomDecision()));
         }
 
         printScroes(false);
@@ -187,6 +190,9 @@ public class Game {
      */
     private void printProgress() {
         System.out.println("Generacja " + currentPopulation + " z " + numberOfPopulations);
+        if (showScoreAfterGeneration) {
+            printScroes(false);
+        }
     }
 
     public int getNumberOfPopulations() {
