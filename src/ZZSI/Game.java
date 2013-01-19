@@ -47,6 +47,9 @@ public class Game {
 
             if (currentPopulation != numberOfPopulations - 1) {  //mutowanie do przedostatniej rundy, aby wyświetlić prawidłowe wyniki
                 mutate();
+                for (Prisoner prisoner : prisoners.values()) {
+                    prisoner.zeroScore();
+                }
             }
 
             ++currentPopulation;
@@ -166,6 +169,20 @@ public class Game {
      * @param sort jeśli true to sortuj wyniki, inaczej pozostaw kolejność listy
      */
     private void printScroes(boolean sort) {
+        if (sort) {
+            List<Map.Entry<String, Prisoner>> entries = new ArrayList<Map.Entry<String, Prisoner>>(prisoners.entrySet());
+            Collections.sort(entries, new Comparator<Map.Entry<String, Prisoner>>() {
+                @Override
+                public int compare(Map.Entry<String, Prisoner> o1, Map.Entry<String, Prisoner> o2) {
+                    return Double.compare(o2.getValue().getScore(), o1.getValue().getScore());
+                }
+            });
+
+            prisoners = new LinkedHashMap<String, Prisoner>();
+            for (Map.Entry<String, Prisoner> entry: entries) {
+                prisoners.put(entry.getKey(), entry.getValue());
+            }
+        }
         System.out.format("%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Nazwa", "Punkty", "Ostatnia decyzja", "Temptation %",
                 "Reward %", "Suckers Payoff %", "Punishment %");
         System.out.println();

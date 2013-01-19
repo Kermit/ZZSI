@@ -149,4 +149,8 @@ public class Prisoner {
         setProbabilities(new Probabilities(random.nextInt(100), random.nextInt(100),
                 random.nextInt(100), random.nextInt(100)));
     }
+
+    public void zeroScore() {
+        score = 0.0;
+    }
 }
