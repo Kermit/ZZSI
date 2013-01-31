@@ -209,13 +209,6 @@ public class Game {
         }
     }
 
-    public int getNumberOfPopulations() {
-        return numberOfPopulations;
-    }
-
-    public int getNumberOfPrisoners() {
-        return numberOfPrisoners;
-    }
 
     public int getNumberOfRounds() {
         return numberOfRounds;
